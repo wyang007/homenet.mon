@@ -11,10 +11,12 @@ import matplotlib.dates as mdates
 from hometraffic import Traffic
 from BGW210_700 import BGW210_700
 
-nhist = 60
-sleepTime = 10
-
+# Adjust the following
+matplotlib.rcParams['timezone'] = 'US/Pacific'
 myBGW210_700_ip="192.168.1.1"
+nhist = 120 
+sleepTime = 15
+# end of adjustment
 
 def willplot(array, min):
     for i in range(0, len(array)):
@@ -55,7 +57,7 @@ while 1:
             #axs[0].set_xlim(left=sleepTime, right=int((tArray[n-1]+sleepTime*nhist*.15)))
             #axs[0].set_xlim(left=tArray[0], right=int((tArray[n-1]+sleepTime*nhist*.15)))
             axs[0].set_xlim(left=tArray[0], 
-                            right=mdates.epoch2num(mdates.num2epoch(tArray[n-1]) + int(sleepTime*nhist*.15)))
+                            right=mdates.epoch2num(mdates.num2epoch(tArray[n-1]) + int(sleepTime*nhist*.25)))
 
             axs[0].set_title("Receive (RX)", fontsize=14, fontweight='bold')
             axs[0].plot(tArray, dArray, label=dev, linewidth=3)
@@ -70,7 +72,7 @@ while 1:
 
     axs[0].legend(loc=1)
     axs[1].legend(loc=1)
-    axs[0].xaxis.set_major_formatter( mdates.DateFormatter('%M:%S') )
+    axs[0].xaxis.set_major_formatter( mdates.DateFormatter('%H:%M:%S') )
     fig.autofmt_xdate()
     plt.pause(0.05)
     #plt.show()
