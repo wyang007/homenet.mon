@@ -3,6 +3,13 @@
 
 import os, time
 
+manual_device_list = {"a8:10:87:4a:a6:e7":"RingChime",
+                      "e8:ab:fa:17:a1:69":"Cam0",
+                      "e8:ab:fa:50:b3:e1":"Cam2",
+                      "00:80:77:d1:db:0b":"Printer",
+                      "lan3":"MyOffice",
+                      "lan1":"rpi3"}
+
 class BGW210_700:
     def __init__(self, ip):
         self.devip = ip
@@ -31,6 +38,8 @@ class BGW210_700:
         p.close()
     
     def query_device_name(self, macaddr):
+        if manual_device_list.has_key(macaddr):
+            return manual_device_list[macaddr]
         if macaddr.find("lan") == 0:
             return macaddr
         if self.devices.has_key(macaddr):
