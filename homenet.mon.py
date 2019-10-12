@@ -5,6 +5,7 @@ import sys, os, time, datetime
 # if running on a Mac, do this one time step
 # cd ~/.matplotlib
 # fc-list # this will take severial minutes.
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
