@@ -2,18 +2,19 @@
 #
 
 import os, time
+import urllib # in python3, use import urllib.request
 
 class BGW210_700:
     def __init__(self, ip, manual_device_list = {}):
         self.devip = ip
         self.devices = {}
         self.manual_device_list = manual_device_list
-        self.devlistcmd = "curl -s http://%s/cgi-bin/devices.ha" % self.devip
-        self.wanquerycmd = "curl -s http://%s/cgi-bin/broadbandstatistics.ha" % self.devip
-        self.lanquerycmd = "curl --stderr /dev/null -s http://%s/cgi-bin/lanstatistics.ha" % self.devip
+        self.devlisturl = "http://%s/cgi-bin/devices.ha" % self.devip
+        self.wanqueryurl = "http://%s/cgi-bin/broadbandstatistics.ha" % self.devip
+        self.lanqueryurl = "http://%s/cgi-bin/lanstatistics.ha" % self.devip
 
     def make_device_list(self):
-        p = os.popen(self.devlistcmd)
+        p = urllib.urlopen(self.devlisturl)
         while 1:
             line = p.readline()
             if not line:
@@ -47,7 +48,7 @@ class BGW210_700:
     
     def wancollector(self, traffic):
         t = int(time.time())
-        p = os.popen(self.wanquerycmd)
+        p = urllib.urlopen(self.wanqueryurl)
         wanipv4sector = 0
         while 1:
             line = p.readline()
@@ -78,7 +79,7 @@ class BGW210_700:
     
     def lancollector(self, traffic):
         t = int(time.time())
-        p = os.popen(self.lanquerycmd)
+        p = urllib.urlopen(self.lanqueryurl)
         wifisector = 0
         lansector = 0
         while 1:
@@ -101,7 +102,7 @@ class BGW210_700:
                 if line.find('<tr class="a"><td scope="row" class="heading">') == 0:
                     macaddr = p.readline()[:-1]
                     for i in range(0, 9):
-                        line = p.readline()
+                        p.readline()
                     rxpkts = int(p.readline().replace(" ","").split("<")[0])
     
                     txpkts = int(p.readline().replace(" ","").split("<")[0])
